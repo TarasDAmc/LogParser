@@ -1,0 +1,69 @@
+﻿<Window x:Class="LogParser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LogParser"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Background="CadetBlue">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="140*"/>
+            <ColumnDefinition Width="655*"/>
+        </Grid.ColumnDefinitions>
+        <Label 
+            x:Name="Ports"
+            Content="Ports"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="0,50,0,0"
+            Grid.Column="1" >
+        </Label>
+        <Button
+            x:Name="Connect_btn"
+            Content="Connect"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="64,50,0,0"
+            Height="20"
+            Width="70" 
+            Grid.Column="1" 
+            RenderTransformOrigin="1.698,0.633" >
+        </Button>
+        <ComboBox 
+            x:Name="COM_Port_list"
+            DataContext="Ports"
+            HorizontalAlignment="Center"
+            Margin="0,75,0,0"
+            VerticalAlignment="Top"
+            Height="20"
+            Width="130" 
+            Grid.Column="1"/>
+        <Label 
+            Name="Baud"
+            Content="Baud"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="0,95,0,0" Grid.Column="1" 
+            Height="26"
+            Width="45">
+        </Label>
+        <ComboBox 
+            x:Name="BaudRateBox"
+            HorizontalAlignment="Center"
+            Margin="0,120,0,0"
+            VerticalAlignment="Top" 
+            Height="20"
+            Width="130" 
+            Grid.Column="1"/>
+        <TextBox 
+            x:Name="LogText"
+            TextWrapping="Wrap"
+            Margin="0,50,15,30"
+            Height="NaN"
+            Width="NaN"
+            Background="LightGray" 
+            Grid.Column="2"/>
+    </Grid>
+</Window>
