@@ -11,67 +11,54 @@
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="140*"/>
             <ColumnDefinition Width="655*"/>
-        </Grid.ColumnDefinitions>
-        <Label 
-            x:Name="Ports"
-            Content="Ports"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Margin="0,50,0,0"
-            Grid.Column="1" >
-        </Label>
-        <Button
-            x:Name="Connect_btn"
-            Content="Connect"
-            Click="Connect_Click"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Margin="64,50,0,0"
-            Height="20"
-            Width="70" 
-            Grid.Column="1" 
-            RenderTransformOrigin="1.698,0.633" >
-        </Button>
-        <ComboBox 
-            x:Name="COM_Port_list"
-            DataContext="Ports"
-            HorizontalAlignment="Center"
-            Margin="0,75,0,0"
-            VerticalAlignment="Top"
-            Height="20"
-            Width="130" 
-            Grid.Column="1"/>
-        <Label 
-            Name="Baud"
-            Content="Baud"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Margin="0,95,0,0" Grid.Column="1" 
-            Height="26"
-            Width="45">
-        </Label>
-        <ComboBox 
-            x:Name="BaudRateBox"
-            HorizontalAlignment="Center"
-            Margin="0,120,0,0"
-            VerticalAlignment="Top" 
-            Height="20"
-            Width="130" 
-            Grid.Column="1"/>
+        </Grid.ColumnDefinitions>      
         <TextBox 
             x:Name="LogText"
             TextWrapping="Wrap"
             Margin="0,50,15,30"
-            Height="NaN"
-            Width="NaN"
             Background="LightGray" 
             Grid.Column="2"/>
         <StackPanel VerticalAlignment="Top" Grid.Column="1"
-            Margin="0,150,15,30">
-            <Button Content="Clear" x:Name="btnClear" Click="btnClear_Click"/>
-
-
+            Margin="5,47,5,30">
+            <DockPanel>
+                <Label
+                    Name="Ports"
+                    Content="Ports"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Left"
+                    FontWeight="Bold"/>
+                <ComboBox 
+                    x:Name="COM_Port_list"
+                    DataContext="Ports"
+                    DockPanel.Dock="Right"
+                    Margin="3"/>
+            </DockPanel>
+            <DockPanel>
+                <Label 
+                    Name="Baud"
+                    Content="Baud"
+                    HorizontalAlignment="Left"                    
+                    DockPanel.Dock="Left"
+                    FontWeight="Bold"/>
+                <ComboBox 
+                    x:Name="BaudRateBox"
+                    DockPanel.Dock="Right"
+                    Margin="3"/>
+            </DockPanel>
+            <Button 
+                    Content="Connect" 
+                    x:Name="Connect_btn" 
+                    Click="Connect_Click"   
+                    DockPanel.Dock="Right"
+                    Margin="1"
+                    FontWeight="Bold"/>
+            <Button 
+                    Content="Clear"
+                    x:Name="btnClear"
+                    Click="btnClear_Click"
+                    DockPanel.Dock="Left"
+                    Margin="1"
+                    FontWeight="Bold"/>
         </StackPanel>
-
     </Grid>
 </Window>
