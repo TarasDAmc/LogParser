@@ -1,14 +1,23 @@
 ﻿using System;
-using System.IO.Ports;
 using System.Windows;
 
 namespace LogParser
 {
     public partial class MainWindow
     {
-        private void Reload_Click(object sender, RoutedEventArgs e)
+        private void Cleanup()
         {
-            COM_Port_list.ItemsSource = SerialPort.GetPortNames();
+            try
+            {
+                if (readData is not null)
+                {
+                    readData.ClosePort();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Something wrong closing the port" + ex.ToString());
+            }
         }
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
@@ -24,23 +33,19 @@ namespace LogParser
                         {
                             dispatcherTimer.Start();
 
-                            readData = new ReadDataFromCom();
+                            readData = new ReadDataFromCom(AppendText);
                             if (readData.OpenPort(COM_Port_list.Text, Convert.ToInt32(BaudRateBox.Text)))
                                 Connect_btn.Content = "Disconnect";
-
-
                         }
                     }
                 }
                 else
                 {
                     if (readData.ClosePort()) Connect_btn.Content = "Connect";
-
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

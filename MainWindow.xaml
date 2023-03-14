@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LogParser"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Background="CadetBlue">
+        Title="MainWindow" Height="450" Width="800" Background="CadetBlue" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
@@ -23,6 +23,7 @@
         <Button
             x:Name="Connect_btn"
             Content="Connect"
+            Click="Connect_Click"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Margin="64,50,0,0"
@@ -65,5 +66,12 @@
             Width="NaN"
             Background="LightGray" 
             Grid.Column="2"/>
+        <StackPanel VerticalAlignment="Top" Grid.Column="1"
+            Margin="0,150,15,30">
+            <Button Content="Clear" x:Name="btnClear" Click="btnClear_Click"/>
+
+
+        </StackPanel>
+
     </Grid>
 </Window>
