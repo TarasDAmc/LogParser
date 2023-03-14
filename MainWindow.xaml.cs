@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Ports;
+using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -31,7 +32,11 @@ namespace LogParser
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        LogText.Text += text;
+                        string line = LineSeparator(text);
+                        if (line != null)
+                        {
+                            LogText.Text += line;
+                        }
                     });
                 }
             }
@@ -56,6 +61,24 @@ namespace LogParser
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Cleanup();
+        }
+
+        private string LineSeparator(string text)
+        {
+            string delimiter = "[0m";
+            StringBuilder sb = new StringBuilder();
+            int startIndex = 0;
+
+            int delimiterIndex = text.IndexOf(delimiter);
+            while (delimiterIndex != -1)
+            {
+                sb.Append(text.Substring(startIndex, delimiterIndex - startIndex));
+                startIndex = delimiterIndex + delimiter.Length;
+                delimiterIndex = text.IndexOf(delimiter, startIndex);
+            }
+
+            sb.Append(text.Substring(startIndex));
+            return sb.ToString();
         }
     }
 }

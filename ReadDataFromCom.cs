@@ -73,8 +73,9 @@ namespace LogParser
                 if (_port.BytesToRead > 0)
                 {
                     byte[] bytee = new byte[count];
-                    _port.Read(bytee, 0, count);
+                    _port.Read(bytee, 0, count); // here was throwed an "invalid operation exception" (the port was closed)
                     onTextReaded(System.Text.Encoding.UTF8.GetString(bytee));
+
                 }
                 if (_port.BytesToRead == 0) readedData = true;
             }
