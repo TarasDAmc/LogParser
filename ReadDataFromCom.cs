@@ -13,8 +13,17 @@ namespace LogParser
         public List<Frame> framesToExectute;
         bool readedData;   // if readBytesToread>0=false
         MainWindow m;
+
         public ReadDataFromCom()
         {
+            buffer = new List<byte>();
+            framesToExectute = new List<Frame>();
+        }
+        Action<string> onTextReaded = (string s) => { };
+
+        public ReadDataFromCom(Action<string> onTextRecevied)
+        {
+            onTextReaded = onTextRecevied;
             buffer = new List<byte>();
             framesToExectute = new List<Frame>();
         }
@@ -24,17 +33,14 @@ namespace LogParser
             {
                 _port = new SerialPort(comPort, baudrate);
 
-                // _port.DataReceived += _port_DataReceived;
+                _port.DataReceived += _port_DataReceived;
                 _port.ReceivedBytesThreshold = 14;
 
                 _port.Open();
 
-                //VMS_COMM.SetSerialPort(_port);
-
                 if (_port.IsOpen)
                 {
                     readedData = true;
-                    //tim1.Start();
                     return true;
                 }
             }
@@ -51,6 +57,27 @@ namespace LogParser
             _port.Close();
             if (!_port.IsOpen) return true;
             else return false;
+        }
+        private void _port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            if (_port.BytesToRead >= 14)
+            {
+                readedData = false;
+                ReadData(_port.BytesToRead);
+            }
+        }
+        private void ReadData(int count)
+        {
+            if (_port.IsOpen)
+            {
+                if (_port.BytesToRead > 0)
+                {
+                    byte[] bytee = new byte[count];
+                    _port.Read(bytee, 0, count);
+                    onTextReaded(System.Text.Encoding.UTF8.GetString(bytee));
+                }
+                if (_port.BytesToRead == 0) readedData = true;
+            }
         }
     }
 }
