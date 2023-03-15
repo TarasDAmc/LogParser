@@ -2,39 +2,29 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace LogParser
 {
     class ReadDataFromCom
     {
         SerialPort _port;
-        List<byte> buffer;
-        public List<Frame> framesToExectute;
         bool readedData;   // if readBytesToread>0=false
-        MainWindow m;
+        List<string> textList;
 
-        public ReadDataFromCom()
-        {
-            buffer = new List<byte>();
-            framesToExectute = new List<Frame>();
-        }
         Action<string> onTextReaded = (string s) => { };
-
+        public ReadDataFromCom() { }
         public ReadDataFromCom(Action<string> onTextRecevied)
         {
+            textList = new List<string>();
             onTextReaded = onTextRecevied;
-            buffer = new List<byte>();
-            framesToExectute = new List<Frame>();
         }
         public bool OpenPort(string comPort, int baudrate)
         {
             try
             {
                 _port = new SerialPort(comPort, baudrate);
-
                 _port.DataReceived += _port_DataReceived;
-                _port.ReceivedBytesThreshold = 14;
+                _port.ReceivedBytesThreshold = 14; // why we use exactly "14"?
 
                 _port.Open();
 
@@ -44,9 +34,9 @@ namespace LogParser
                     return true;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show("Something wrong with the port" + e.ToString());
+                MessageBox.Show("Something wrong with the port" + ex.ToString());
                 return false;
             }
             return false;
@@ -75,7 +65,6 @@ namespace LogParser
                     byte[] bytee = new byte[count];
                     _port.Read(bytee, 0, count); // here was throwed an "invalid operation exception" (the port was closed)
                     onTextReaded(System.Text.Encoding.UTF8.GetString(bytee));
-
                 }
                 if (_port.BytesToRead == 0) readedData = true;
             }

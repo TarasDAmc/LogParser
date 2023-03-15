@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Ports;
-using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -15,6 +14,7 @@ namespace LogParser
 
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
         ReadDataFromCom readData;
+        List<int> baudRateList = new List<int>() { 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 56000, 57600, 115200, 128000, 256000 };
         public MainWindow()
         {
             InitializeComponent();
@@ -22,8 +22,6 @@ namespace LogParser
             BaudRateBox.ItemsSource = baudRateList;
             BaudRateBox.Text = "115200";
         }
-
-        List<int> baudRateList = new List<int>() { 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 56000, 57600, 115200, 128000, 256000 };
         private void AppendText(string text)
         {
             try
@@ -32,11 +30,7 @@ namespace LogParser
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        string line = LineSeparator(text);
-                        if (line != null)
-                        {
-                            LogText.Text += line;
-                        }
+                        LogText.Text += text;
                     });
                 }
             }
@@ -61,24 +55,6 @@ namespace LogParser
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Cleanup();
-        }
-
-        private string LineSeparator(string text)
-        {
-            string delimiter = "[0m";
-            StringBuilder sb = new StringBuilder();
-            int startIndex = 0;
-
-            int delimiterIndex = text.IndexOf(delimiter);
-            while (delimiterIndex != -1)
-            {
-                sb.Append(text.Substring(startIndex, delimiterIndex - startIndex));
-                startIndex = delimiterIndex + delimiter.Length;
-                delimiterIndex = text.IndexOf(delimiter, startIndex);
-            }
-
-            sb.Append(text.Substring(startIndex));
-            return sb.ToString();
         }
     }
 }

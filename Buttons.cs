@@ -9,10 +9,7 @@ namespace LogParser
         {
             try
             {
-                if (readData is not null)
-                {
-                    readData.ClosePort();
-                }
+                if (readData is not null) readData.ClosePort();
             }
             catch (Exception ex)
             {
@@ -32,8 +29,8 @@ namespace LogParser
                         if (isNumeric == true)
                         {
                             dispatcherTimer.Start();
-
                             readData = new ReadDataFromCom(AppendText);
+
                             if (readData.OpenPort(COM_Port_list.Text, Convert.ToInt32(BaudRateBox.Text)))
                                 Connect_btn.Content = "Disconnect";
                         }
