@@ -15,7 +15,6 @@ namespace LogParser
         public ReadDataFromCom() { }
         public ReadDataFromCom(Action<string> onTextRecevied)
         {
-            textList = new List<string>();
             onTextReaded = onTextRecevied;
         }
         public bool OpenPort(string comPort, int baudrate)
@@ -58,15 +57,22 @@ namespace LogParser
         }
         private void ReadData(int count)
         {
-            if (_port.IsOpen)
+            try
             {
-                if (_port.BytesToRead > 0)
+                if (_port.IsOpen)
                 {
-                    byte[] bytee = new byte[count];
-                    _port.Read(bytee, 0, count); // here was throwed an "invalid operation exception" (the port was closed)
-                    onTextReaded(System.Text.Encoding.UTF8.GetString(bytee));
+                    if (_port.BytesToRead > 0)
+                    {
+                        byte[] buffer = new byte[count];
+                        _port.Read(buffer, 0, count);
+                        onTextReaded(System.Text.Encoding.UTF8.GetString(buffer));
+                    }
+                    if (_port.BytesToRead == 0) readedData = true;
                 }
-                if (_port.BytesToRead == 0) readedData = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Port was closing while therunning ReadData method", ex.Message);
             }
         }
     }
