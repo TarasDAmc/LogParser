@@ -29,7 +29,7 @@ namespace LogParser
                         if (isNumeric == true)
                         {
                             dispatcherTimer.Start();
-                            readData = new ReadDataFromCom(AppendText);
+                            readData = new ReadDataFromCom(AppendBytes);
 
                             if (readData.OpenPort(COM_Port_list.Text, Convert.ToInt32(BaudRateBox.Text)))
                                 Connect_btn.Content = "Disconnect";

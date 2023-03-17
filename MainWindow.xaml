@@ -11,13 +11,13 @@
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="140*"/>
             <ColumnDefinition Width="655*"/>
-        </Grid.ColumnDefinitions>      
-        <TextBox 
+        </Grid.ColumnDefinitions>
+        <TextBlock
             x:Name="LogText"
             TextWrapping="Wrap"
             Margin="0,50,15,30"
-            Background="LightGray" 
-            Grid.Column="2"/>
+            Background="Black" 
+            Grid.Column="2" />
         <StackPanel VerticalAlignment="Top" Grid.Column="1"
             Margin="5,47,5,30">
             <DockPanel>
