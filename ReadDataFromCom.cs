@@ -7,16 +7,27 @@ namespace LogParser
 {
     class ReadDataFromCom
     {
+        #region Fields
         SerialPort _port;
         bool readedData;   // if readBytesToread>0=false
         List<string> textList;
+        #endregion
 
+        #region Actions
         Action<string> onTextReaded = (string s) => { };
+        Action<byte[]> onByteReaded = (byte[] b) => { };
+        #endregion
+        #region CTOR
         public ReadDataFromCom() { }
         public ReadDataFromCom(Action<string> onTextRecevied)
         {
             onTextReaded = onTextRecevied;
         }
+        public ReadDataFromCom(Action<byte[]> onByteRecevied)
+        {
+            onByteReaded = onByteRecevied;
+        }
+        #endregion
         public bool OpenPort(string comPort, int baudrate)
         {
             try
@@ -65,14 +76,15 @@ namespace LogParser
                     {
                         byte[] buffer = new byte[count];
                         _port.Read(buffer, 0, count);
-                        onTextReaded(System.Text.Encoding.UTF8.GetString(buffer));
+                        //onTextReaded(System.Text.Encoding.UTF8.GetString(buffer));
+                        onByteReaded(buffer);
                     }
                     if (_port.BytesToRead == 0) readedData = true;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Port was closing while therunning ReadData method", ex.Message);
+                MessageBox.Show("Port was closing while the running ReadData method", ex.Message);
             }
         }
     }
