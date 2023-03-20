@@ -14,10 +14,15 @@ namespace LogParser
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        #region Fields
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
         ReadDataFromCom readData;
         List<int> baudRateList = new List<int>() { 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 56000, 57600, 115200, 128000, 256000 };
+        List<string> lines = new List<string>();
+        List<byte> buffer = new List<byte>();
+        string line = null;
+        #endregion
+
         public MainWindow()
         {
             InitializeComponent();
@@ -26,24 +31,11 @@ namespace LogParser
             BaudRateBox.Text = "115200";
         }
 
-        List<string> lines = new List<string>();
-        List<byte> buffer = new List<byte>();
-        string line = null;
         private void AppendBytes(byte[] bytes)
         {
             try
             {
-                foreach (byte b in bytes)
-                {
-                    buffer.Add(b);
-                    if (b == 0x0a) // b == '\n'
-                    {
-                        lines.Add(System.Text.Encoding.UTF8.GetString(buffer.ToArray()));
-                        buffer.Clear();
-                    }
-                    line = lines.FirstOrDefault();
-
-                }
+                LineAllocator(bytes);
                 if (Application.Current is not null)
                 {
                     Application.Current.Dispatcher.Invoke(() =>
@@ -51,7 +43,6 @@ namespace LogParser
                         if (line is not null)
                         {
                             LineBrusher(line);
-                            //LogText.Inlines.Add(line);
                             lines.Clear();
 
                         }
@@ -80,7 +71,28 @@ namespace LogParser
         {
             Cleanup();
         }
-        public void LineBrusher(string line)
+        /// <summary>
+        /// This object difine the end of the line.
+        /// </summary>
+        /// <param name="bytes"></param>
+        private void LineAllocator(byte[] bytes)
+        {
+            foreach (byte b in bytes)
+            {
+                buffer.Add(b);
+                if (b == 0x0a) // b == '\n'
+                {
+                    lines.Add(System.Text.Encoding.UTF8.GetString(buffer.ToArray()));
+                    buffer.Clear();
+                }
+                line = lines.FirstOrDefault();
+            }
+        }
+        /// <summary>
+        /// Changing the colour of the line depend on key sequence.
+        /// </summary>
+        /// <param name="line"></param>
+        private void LineBrusher(string line)
         {
             if (line.Contains("[0;32mI"))
             {
@@ -119,10 +131,15 @@ namespace LogParser
                 LogText.Inlines.Add(run);
             }
         }
-
+        /// <summary>
+        /// Cleaning the line from key sequences before outputting.
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
         public static string LineCleaner(string line)
         {
             return line = string.Join(" ", line.Split(' ').Where(p => !p.StartsWith("["))).Replace("[0m", "");
         }
+
     }
 }
