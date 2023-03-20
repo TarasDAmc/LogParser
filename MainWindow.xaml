@@ -5,23 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LogParser"
         mc:Ignorable="d"
-        Title="MainWindow" Height="900" Width="800" Background="CadetBlue" Closing="Window_Closing">
+        Title="MainWindow" Height="900" Width="1400" Background="CadetBlue" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="140*"/>
-            <ColumnDefinition Width="655*"/>
+            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer            
-            VerticalScrollBarVisibility="Visible"
-            Margin="0,50,15,30"
-            Grid.Column="2" >
-            <TextBlock
-                x:Name="LogText"
-                TextWrapping="Wrap"                
-                Background="Black"
-                />
-        </ScrollViewer>        
+        <UniformGrid Columns="2" x:Name="gridForTextBlocks"
+            Grid.Column="2" Rows="3" >
+        </UniformGrid>
         <StackPanel VerticalAlignment="Top" Grid.Column="1"
             Margin="5,47,5,30">
             <DockPanel>
@@ -55,7 +48,7 @@
                 Click="Connect_Click"   
                 DockPanel.Dock="Right"
                 Margin="1"
-                FontWeight="Bold"/>
+                FontWeight="Bold" />
             <Button 
                 Content="Clear"
                 x:Name="btnClear"
@@ -63,29 +56,41 @@
                 DockPanel.Dock="Left"
                 Margin="1"
                 FontWeight="Bold"/>
-            <Label
-                Content="Show messages"
-                x:Name="Massages"
-                FontWeight="Bold"/>
-            <CheckBox
-                x:Name="ShowInfo"
-                Content="Show INFO"
-                IsChecked="True"/>
-            <CheckBox
-                x:Name="ShowWarnings"
-                Content="Show Warnings"
-                IsChecked="True"
-                />
-            <CheckBox
-                x:Name="ShowErrors"
-                Content="Show ERROR"
-                IsChecked="True"
-                />
-            <CheckBox
-                x:Name="ShowEcho"
-                Content="Show Echo"
-                IsChecked="True"
-                />
+            <Border BorderBrush="AliceBlue" CornerRadius="5" BorderThickness="2" Margin="0 40 0 0">
+                <StackPanel>
+                    <Label
+                        Content="Display creation"
+                        x:Name="lblCreateDisplay"
+                        FontWeight="Bold"/>
+                    <Label
+                        Content="Show messages"
+                        x:Name="Massages"
+                        FontWeight="Bold"/>
+                    <CheckBox
+                        x:Name="cbShowInfo"
+                        Content="Show INFO"
+                        IsChecked="True"/>
+                    <CheckBox
+                        x:Name="cbShowWarnings"
+                        Content="Show Warnings"
+                        IsChecked="True" />
+                    <CheckBox
+                        x:Name="cbShowErrors"
+                        Content="Show ERROR"
+                        IsChecked="True" />
+                    <CheckBox
+                        x:Name="cbShowEcho"
+                        Content="Show Echo"
+                        IsChecked="True" />
+                    <Button 
+                        Content="Create display" 
+                        x:Name="btnText" 
+                        Click="btnText_Click"   
+                        DockPanel.Dock="Right"
+                        Margin="1"
+                        FontWeight="Bold" />
+                </StackPanel>
+            </Border>
         </StackPanel>
     </Grid>
 </Window>

@@ -12,10 +12,7 @@ namespace LogParser
         bool readedData;   // if readBytesToread>0=false
         List<string> textList;
         #endregion
-
-        #region Actions
         Action<byte[]> onByteReaded = (byte[] b) => { };
-        #endregion
         #region CTOR
         public ReadDataFromCom() { }
         public ReadDataFromCom(Action<byte[]> onByteRecevied)
