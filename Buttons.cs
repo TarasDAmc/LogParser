@@ -16,6 +16,7 @@ namespace LogParser
                 MessageBox.Show("Something wrong closing the port" + ex.ToString());
             }
         }
+
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
             int baudRate = 0;
@@ -44,6 +45,33 @@ namespace LogParser
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        private void btnCreate_Display_Click(object sender, RoutedEventArgs e)
+        {
+            LogDisplay ddCustom = new LogDisplay(CloseDisplay, "Custom display", new DisplaySettings(customDisplayConfiguration));
+            displays.Add(ddCustom);
+            gridForTextBlocks.Children.Add(ddCustom);
+        }
+
+        /// <summary>
+        /// Clearing all windows.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                foreach (var d in displays)
+                {
+                    d.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The problem with closing log window", ex.Message);
             }
         }
     }

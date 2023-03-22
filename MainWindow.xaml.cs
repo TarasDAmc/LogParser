@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Media;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace LogParser
@@ -20,7 +19,9 @@ namespace LogParser
         List<int> baudRateList = new List<int>() { 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 56000, 57600, 115200, 128000, 256000 };
         List<string> lines = new List<string>();
         List<byte> buffer = new List<byte>();
-        string line = null;
+        string line = "";
+        List<LogDisplay> displays = new List<LogDisplay>();
+
         #endregion
 
         public MainWindow()
@@ -29,30 +30,6 @@ namespace LogParser
             COM_Port_list.ItemsSource = SerialPort.GetPortNames();
             BaudRateBox.ItemsSource = baudRateList;
             BaudRateBox.Text = "115200";
-        }
-
-        private void AppendBytes(byte[] bytes)
-        {
-            try
-            {
-                LineAllocator(bytes);
-                if (Application.Current is not null)
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        if (line is not null)
-                        {
-                            LineBrusher(line);
-                            lines.Clear();
-
-                        }
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("The problem with text output into the TextBox", ex.Message);
-            }
         }
         private void onEnterPressed(object sender, System.Windows.Input.KeyEventArgs e)
         {
@@ -63,19 +40,44 @@ namespace LogParser
                 BaudRateBox.ItemsSource = baudRateList;
             }
         }
-        private void btnClear_Click(object sender, RoutedEventArgs e)
+
+        private void AppendBytes(byte[] bytes)
         {
-            LogText.Text = String.Empty;
+            try
+            {
+                string lineToAdd = LineAllocator(bytes);
+                if (Application.Current is not null)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        if (displays.Count == 0)
+                        {
+                            LogDisplay ddAtLeastWarn = new LogDisplay(CloseDisplay, "At least warnings", new DisplaySettings(DisplayType.atLeastWarning));
+                            displays.Add(ddAtLeastWarn);
+                            gridForTextBlocks.Children.Add(ddAtLeastWarn);
+                            LogDisplay ddAll = new LogDisplay(CloseDisplay, "All", new DisplaySettings());
+                            displays.Add(ddAll);
+                            gridForTextBlocks.Children.Add(ddAll);
+                        }
+                        foreach (var d in displays)
+                        {
+                            d.LineAppender(lineToAdd);
+                        }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The problem with text output into the TextBlock", ex.Message);
+            }
         }
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            Cleanup();
-        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) => Cleanup();
+
         /// <summary>
         /// This object difine the end of the line.
         /// </summary>
         /// <param name="bytes"></param>
-        private void LineAllocator(byte[] bytes)
+        private string LineAllocator(byte[] bytes)
         {
             foreach (byte b in bytes)
             {
@@ -85,61 +87,54 @@ namespace LogParser
                     lines.Add(System.Text.Encoding.UTF8.GetString(buffer.ToArray()));
                     buffer.Clear();
                 }
-                line = lines.FirstOrDefault();
+                line = lines.FirstOrDefault() ?? String.Empty;
             }
-        }
-        /// <summary>
-        /// Changing the colour of the line depend on key sequence.
-        /// </summary>
-        /// <param name="line"></param>
-        private void LineBrusher(string line)
-        {
-            if (line.Contains("[0;32mI"))
-            {
-                Run run = new Run(LineCleaner(line));
-                run.Foreground = Brushes.Green;
-                LogText.Inlines.Add(run);
-            }
-            else if (line.Contains("[0;31mE"))
-            {
-                Run run = new Run(LineCleaner(line));
-                run.Foreground = Brushes.Red;
-                LogText.Inlines.Add(run);
-            }
-            else if (line.Contains("[0;33mW"))
-            {
-                Run run = new Run(LineCleaner(line));
-                run.Foreground = Brushes.Yellow;
-                LogText.Inlines.Add(run);
-            }
-            else if (line.Contains("[0;34m"))
-            {
-                Run run = new Run(LineCleaner(line));
-                run.Foreground = Brushes.LightBlue;
-                LogText.Inlines.Add(run);
-            }
-            else if (line.Contains("[1;34m"))
-            {
-                Run run = new Run(LineCleaner(line));
-                run.Foreground = Brushes.LightSkyBlue;
-                LogText.Inlines.Add(run);
-            }
-            else
-            {
-                Run run = new Run(LineCleaner(line));
-                run.Foreground = Brushes.White;
-                LogText.Inlines.Add(run);
-            }
-        }
-        /// <summary>
-        /// Cleaning the line from key sequences before outputting.
-        /// </summary>
-        /// <param name="line"></param>
-        /// <returns></returns>
-        public static string LineCleaner(string line)
-        {
-            return line = string.Join(" ", line.Split(' ').Where(p => !p.StartsWith("["))).Replace("[0m", "");
+            lines.Clear();
+            return line;
         }
 
+        /// <summary>
+        /// Closing the display on btnClose Click.
+        /// </summary>
+        /// <param name="displayToRemove"></param>
+        private void CloseDisplay(LogDisplay displayToRemove)
+        {
+            try
+            {
+                gridForTextBlocks.Children.Remove(displayToRemove);
+                displays.Remove(displayToRemove);
+            }
+            catch
+            {
+
+            }
+        }
+
+        List<CheckBox> customDisplayConfiguration = new List<CheckBox>();
+        private void Window_Configuration(object sender, RoutedEventArgs e)
+        {
+            cbInfo.IsChecked = true;
+            cbErrors.IsChecked = true;
+            cbWarnings.IsChecked = true;
+            cbEcho.IsChecked = true;
+            cbBold.IsChecked = true;
+            cbSimple.IsChecked = true;
+
+            customDisplayConfiguration.Add(cbInfo);
+            customDisplayConfiguration.Add(cbErrors);
+            customDisplayConfiguration.Add(cbWarnings);
+            customDisplayConfiguration.Add(cbEcho);
+            customDisplayConfiguration.Add(cbBold);
+            customDisplayConfiguration.Add(cbSimple);
+        }
+
+        private void cb_Display_configuration_change(object checkBox, RoutedEventArgs e)
+        {
+            foreach (CheckBox c in customDisplayConfiguration)
+            {
+                if (c.IsChecked == false) c.IsChecked = false;
+                else c.IsChecked = true;
+            }
+        }
     }
 }

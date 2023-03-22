@@ -5,23 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LogParser"
         mc:Ignorable="d"
-        Title="MainWindow" Height="900" Width="800" Background="CadetBlue" Closing="Window_Closing">
+        Title="MainWindow" Height="900" Width="1400" Background="CadetBlue" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="140*"/>
-            <ColumnDefinition Width="655*"/>
+            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer            
-            VerticalScrollBarVisibility="Visible"
-            Margin="0,50,15,30"
-            Grid.Column="2" >
-            <TextBlock
-                x:Name="LogText"
-                TextWrapping="Wrap"                
-                Background="Black"
-                />
-        </ScrollViewer>        
+        <UniformGrid Columns="2" x:Name="gridForTextBlocks" Margin="0 10 15 0" Grid.Column="2" />
         <StackPanel VerticalAlignment="Top" Grid.Column="1"
             Margin="5,47,5,30">
             <DockPanel>
@@ -54,38 +45,91 @@
                 x:Name="Connect_btn" 
                 Click="Connect_Click"   
                 DockPanel.Dock="Right"
-                Margin="1"
-                FontWeight="Bold"/>
+                Margin="3"
+                FontWeight="Bold" />
             <Button 
                 Content="Clear"
                 x:Name="btnClear"
                 Click="btnClear_Click"
                 DockPanel.Dock="Left"
-                Margin="1"
+                Margin="3"
                 FontWeight="Bold"/>
-            <Label
-                Content="Show messages"
-                x:Name="Massages"
-                FontWeight="Bold"/>
-            <CheckBox
-                x:Name="ShowInfo"
-                Content="Show INFO"
-                IsChecked="True"/>
-            <CheckBox
-                x:Name="ShowWarnings"
-                Content="Show Warnings"
-                IsChecked="True"
-                />
-            <CheckBox
-                x:Name="ShowErrors"
-                Content="Show ERROR"
-                IsChecked="True"
-                />
-            <CheckBox
-                x:Name="ShowEcho"
-                Content="Show Echo"
-                IsChecked="True"
-                />
+            <WrapPanel>
+                <Border BorderBrush="AliceBlue" CornerRadius="5" BorderThickness="2" Margin="0 10 0 0" Background="LightCyan">
+                    <StackPanel>
+                        <Label
+                            Content="Display creation"
+                            HorizontalContentAlignment="Center"
+                            x:Name="lblCreateDisplay"
+                            FontWeight="Bold"
+                            FontSize="15" />
+                        <Label  
+                            HorizontalContentAlignment="Center"
+                            Content="Show messages"
+                            x:Name="Massages"
+                            FontWeight="Bold"/>
+                        <StackPanel Margin="15 0 0 5" >
+                            <!--<CheckBox
+                                x:Name="cbAll"
+                                Content="Show ALL"
+                                IsChecked="True" />-->
+                            <StackPanel Margin="10 5 10 0">
+                                <CheckBox
+                                    x:Name="cbInfo"
+                                    Content="INFO"
+                                    IsChecked="True"
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                                <CheckBox
+                                    x:Name="cbWarnings"
+                                    Content="WARNING"
+                                    IsChecked="True"
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                                <CheckBox
+                                    x:Name="cbErrors"
+                                    Content="ERROR"
+                                    IsChecked="True"
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                                <CheckBox
+                                    x:Name="cbEcho"
+                                    Content="ECHO"
+                                    IsChecked="True" 
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                                <CheckBox
+                                    x:Name="cbBold"
+                                    Content="BOLD"
+                                    IsChecked="True" 
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                                <CheckBox
+                                    x:Name="cbSimple"
+                                    Content="SIMPLE"
+                                    IsChecked="True" 
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                            </StackPanel>
+                        </StackPanel>
+                        <Button
+                            Content="Create new display"
+                            Loaded="Window_Configuration"
+                            x:Name="btnCreate_Display" 
+                            Click="btnCreate_Display_Click"   
+                            DockPanel.Dock="Right"
+                            Margin="3"
+                            Background="GreenYellow"
+                            FontWeight="Bold" />
+                    </StackPanel>
+                </Border>
+            </WrapPanel>
         </StackPanel>
     </Grid>
 </Window>
