@@ -12,9 +12,7 @@
             <ColumnDefinition Width="140"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <UniformGrid Columns="2" x:Name="gridForTextBlocks"
-            Grid.Column="2" Rows="3" >
-        </UniformGrid>
+        <UniformGrid Columns="2" x:Name="gridForTextBlocks" Margin="0 10 15 0" Grid.Column="2" />
         <StackPanel VerticalAlignment="Top" Grid.Column="1"
             Margin="5,47,5,30">
             <DockPanel>
@@ -47,47 +45,65 @@
                 x:Name="Connect_btn" 
                 Click="Connect_Click"   
                 DockPanel.Dock="Right"
-                Margin="1"
+                Margin="3"
                 FontWeight="Bold" />
             <Button 
                 Content="Clear"
                 x:Name="btnClear"
                 Click="btnClear_Click"
                 DockPanel.Dock="Left"
-                Margin="1"
+                Margin="3"
                 FontWeight="Bold"/>
-            <Border BorderBrush="AliceBlue" CornerRadius="5" BorderThickness="2" Margin="0 40 0 0">
+            <Border BorderBrush="AliceBlue" CornerRadius="5" BorderThickness="2" Margin="0 10 0 0" Loaded="Window_Configuration">
                 <StackPanel>
                     <Label
                         Content="Display creation"
+                        HorizontalContentAlignment="Center"
                         x:Name="lblCreateDisplay"
-                        FontWeight="Bold"/>
-                    <Label
+                        FontWeight="Bold"
+                        FontSize="15" />
+                    <Label  
+                        HorizontalContentAlignment="Center"
                         Content="Show messages"
                         x:Name="Massages"
                         FontWeight="Bold"/>
-                    <CheckBox
-                        x:Name="cbShowInfo"
-                        Content="Show INFO"
-                        IsChecked="True"/>
-                    <CheckBox
-                        x:Name="cbShowWarnings"
-                        Content="Show Warnings"
-                        IsChecked="True" />
-                    <CheckBox
-                        x:Name="cbShowErrors"
-                        Content="Show ERROR"
-                        IsChecked="True" />
-                    <CheckBox
-                        x:Name="cbShowEcho"
-                        Content="Show Echo"
-                        IsChecked="True" />
-                    <Button 
+                    <StackPanel Margin="15 0 0 5" >
+                        <!--<CheckBox
+                            x:Name="cbAll"
+                            Content="Show ALL"
+                            Checked="cbAll_CheckedChanged"
+                            Unchecked="cbAll_CheckedChanged"
+                            IsChecked="True" />-->
+                        <StackPanel Margin="10 5 10 0">
+                            <CheckBox
+                                x:Name="cbInfo"
+                                Content="INFO"
+                                IsChecked="True" 
+                                />
+                            <CheckBox
+                                x:Name="cbWarnings"
+                                Content="Warnings"
+                                IsChecked="True"
+                                />
+                            <CheckBox
+                                x:Name="cbErrors"
+                                Content="ERROR"
+                                IsChecked="True" 
+                                />
+                            <CheckBox
+                                x:Name="cbEcho"
+                                Content="ECHO"
+                                IsChecked="True" 
+                                />
+                        </StackPanel>
+                    </StackPanel>
+                    <Button
                         Content="Create display" 
-                        x:Name="btnText" 
-                        Click="btnText_Click"   
+                        x:Name="btnCreate_Display" 
+                        Click="btnCreate_Display_Click"   
                         DockPanel.Dock="Right"
-                        Margin="1"
+                        Margin="3"
+                        Background="GreenYellow"
                         FontWeight="Bold" />
                 </StackPanel>
             </Border>

@@ -15,50 +15,55 @@ namespace LogParser
         string? logTitle = null; // showing the title when check box is on;
 
         DisplaySettings displaySettings;
-        List<SingleLineDisplay> lines;
+        List<Open_Details> lines;
+
+        Action<LogDisplay> onRemove = (LogDisplay d) => { };
+        #region CTOR
         public LogDisplay()
         {
-            lines = new List<SingleLineDisplay>();
+            lines = new List<Open_Details>();
             displaySettings = new DisplaySettings();
             InitializeComponent();
-
-            if (displaySettings.showVerbose)
-            {
-                // ShowInfo.IsChecked = true;
-            }
-
             lbLogTitle.Content = logTitle;
         }
-        Action<LogDisplay> onRemove = (LogDisplay d) => { };
         public LogDisplay(Action<LogDisplay> onClose, string title, DisplaySettings ds)
         {
-            lines = new List<SingleLineDisplay>();
+            lines = new List<Open_Details>();
             this.displaySettings = ds;
             onRemove = onClose;
             this.logTitle = title;
             InitializeComponent();
-
-            if (displaySettings.showVerbose)
-            {
-                // ShowInfo.IsChecked = true;
-            }
             lbLogTitle.Content = logTitle;
         }
-
-        //private void ShowEcho_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    // if (ShowEcho.IsChecked == true)
-        //    {
-        //        displaySettings.showVerbose = true;
-        //    }
-        //    // else
-        //    {
-        //        displaySettings.showVerbose = false;
-        //    }
-        //}
+        #endregion       
         public void Clear() => destination.Text = String.Empty;
         string LineCleaner(string line) => string.Join(" ", line.Split(' ').Where(p => !p.StartsWith("[")));
         string CleanEndLines(string line) => line.Replace("[0m", "");
+
+        string LineDateTimeFounder(string line)
+        {
+            string newLine = line;
+            if (line.Contains(")"))
+            {
+                int endIndex = line.IndexOf(")");
+                int startIndex = line.IndexOf(")") - 7;
+                if (endIndex > 0)
+                {
+                    string substring = line.Substring(startIndex, endIndex - startIndex);
+                    if (int.TryParse(substring, out int numeric))
+                    {
+                        DateTime dateTime = new DateTime(numeric);
+                        string dt = dateTime.ToString();
+                        newLine = line.Replace(substring, dt);
+                    }
+                }
+                return newLine;
+            }
+            else
+            {
+                return newLine;
+            }
+        }
         /// <summary>
         /// Changing the colour of the line depend on key sequence.
         /// </summary>
@@ -67,47 +72,48 @@ namespace LogParser
         {
             if (String.IsNullOrEmpty(lineInput)) return;
             string line = CleanEndLines(lineInput);
+            string hasDate = LineDateTimeFounder(line);
             if (line == null) return;
 
             if (lineInput.Contains("[0;32mI")
                 && (displaySettings.showInfo)) // info
             {
-                spMainLines.Children.Add(new SingleLineDisplay(LineCleaner(line), Brushes.Green));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.Green));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.Green));
             }
             else if (lineInput.Contains("[0;31mE")
                  && (displaySettings.showErrors || displaySettings.showAll)) // error
             {
-                spMainLines.Children.Add(new SingleLineDisplay(LineCleaner(line), Brushes.Red));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.Red));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.Red));
             }
             else if (lineInput.Contains("[0;33mW")
                  && (displaySettings.showWarning || displaySettings.showAll)) //warning
             {
-                spMainLines.Children.Add(new SingleLineDisplay(LineCleaner(line), Brushes.Yellow));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.Yellow));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.Yellow));
             }
             else if (lineInput.Contains("[0;34m")
                  && (displaySettings.showVerbose || displaySettings.showAll)) // verbose
             {
-                spMainLines.Children.Add(new SingleLineDisplay(LineCleaner(line), Brushes.LightBlue));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightBlue));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightBlue));
             }
             else if (lineInput.Contains("[1;34m")
                  && (displaySettings.showVerbose || displaySettings.showAll))// verbose
             {
-                spMainLines.Children.Add(new SingleLineDisplay(LineCleaner(line), Brushes.LightSkyBlue));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightSkyBlue));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightSkyBlue));
             }
             else if (displaySettings.showVerbose || displaySettings.showAll)// verbose
             {
-                spMainLines.Children.Add(new SingleLineDisplay(LineCleaner(line), Brushes.White));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.White));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.White));
             }
             mainSv.ScrollToEnd();
         }
-        private void btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            onRemove(this);
-        }
 
-        private void btnClear_Click(object sender, RoutedEventArgs e)
-        {
-            Clear();
-        }
+        private void btnClose_Click(object sender, RoutedEventArgs e) => onRemove(this);
+        private void btnClear_Click(object sender, RoutedEventArgs e) => Clear();
     }
 }

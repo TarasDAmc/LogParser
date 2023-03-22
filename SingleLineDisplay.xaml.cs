@@ -8,24 +8,28 @@ namespace LogParser
     /// <summary>
     /// Interaction logic for SingleLineDisplay.xaml
     /// </summary>
-    public partial class SingleLineDisplay : UserControl
+    public partial class Open_Details : UserControl
     {
         DateTime dt = DateTime.Now;
-        public SingleLineDisplay()
+        public Open_Details()
         {
             InitializeComponent();
         }
-        public SingleLineDisplay(string content, SolidColorBrush c)
+        public Open_Details(string content, SolidColorBrush c)
         {
             InitializeComponent();
             tbMainText.Foreground = c;
             tbMainText.Text = content;
+            tbMainText.TextAlignment = TextAlignment.Left;
             // TODO: if found time, than add it as a line parameter.
         }
 
-        private void Open_Details(object sendeer, RoutedEventArgs e)
+        public void Open_Details_Window(object sender, RoutedEventArgs e)
         {
-
+            var message = new LogDetailsWindow();
+            message.tbDetail.Text = tbMainText.Text;
+            message.Foreground = tbMainText.Foreground;
+            message.Show();
         }
     }
 }
