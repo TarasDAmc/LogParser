@@ -1,87 +1,63 @@
-﻿namespace LogParser
+﻿using System.Collections.Generic;
+using System.Windows.Controls;
+
+namespace LogParser
 {
     public enum DisplayType
     {
+        all,
         onlyErrors,
         onlyWarnings,
         onlyInfo,
         onlyVerb,
-        all,
         atLeastInfo,
-        atLeastWarning
+        atLeastWarning,
+        warningErrorsInfo,
+        warningInfoVerb,
+        warningErrorsVerb,
+
     };
     public class DisplaySettings
     {
-        public bool showErrors;
-        public bool showWarning;
-        public bool showInfo;
-        public bool showVerbose;
-        public bool showAll;
-        public DisplaySettings()
+        public bool showErrors = true;
+        public bool showWarning = true;
+        public bool showInfo = true;
+        public bool showEcho = true;
+        public bool showBold = true;
+        public bool showSimple = true;
+        public DisplaySettings() { }
+        private readonly List<CheckBox> _displayConfigurationsList;
+        public DisplaySettings(List<CheckBox> displayConfigurationsList)
         {
-            showErrors = true;
-            showWarning = true;
-            showInfo = true;
-            showVerbose = true;
-            showAll = true;
+            _displayConfigurationsList = displayConfigurationsList;
+            foreach (CheckBox c in _displayConfigurationsList)
+            {
+                if (c.Name == "cbInfo" && c.IsChecked == false) showInfo = false;
+                else if (c.Name == "cbWarnings" && c.IsChecked == false) showWarning = false;
+                else if (c.Name == "cbErrors" && c.IsChecked == false) showErrors = false;
+                else if (c.Name == "cbEcho" && c.IsChecked == false) showEcho = false;
+                else if (c.Name == "cbBold" && c.IsChecked == false) showBold = false;
+                else if (c.Name == "cbSimple" && c.IsChecked == false) showSimple = false;
+            }
         }
+
         public DisplaySettings(DisplayType dt)
         {
-            showErrors = false;
-            showWarning = false;
-            showInfo = false;
-            showVerbose = false;
-            showAll = false;
             switch (dt)
             {
-                case DisplayType.onlyErrors:
-                    showErrors = true;
-                    showWarning = false;
-                    showInfo = false;
-                    showVerbose = false;
-                    showAll = false;
-                    break;
-                case DisplayType.onlyWarnings:
-                    showErrors = false;
-                    showWarning = true;
-                    showInfo = false;
-                    showVerbose = false;
-                    showAll = false;
-                    break;
-                case DisplayType.onlyInfo:
-                    showErrors = false;
-                    showWarning = false;
-                    showInfo = true;
-                    showVerbose = false;
-                    showAll = false;
-                    break;
-                case DisplayType.onlyVerb:
-                    showErrors = false;
-                    showWarning = false;
-                    showInfo = false;
-                    showVerbose = true;
-                    showAll = false;
-                    break;
                 case DisplayType.all:
                     showErrors = true;
                     showWarning = true;
                     showInfo = true;
-                    showVerbose = true;
-                    showAll = true;
-                    break;
-                case DisplayType.atLeastInfo:
-                    showErrors = true;
-                    showWarning = true;
-                    showInfo = true;
-                    showVerbose = false;
-                    showAll = false;
+                    showEcho = true;
+                    showBold = true;
+                    showSimple = true;
                     break;
                 case DisplayType.atLeastWarning:
                     showErrors = true;
                     showWarning = true;
                     showInfo = false;
-                    showVerbose = false;
-                    showAll = false;
+                    showEcho = false;
                     break;
             }
         }

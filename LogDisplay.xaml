@@ -18,7 +18,7 @@
                 <Button x:Name="btnClear" Content="Clear" HorizontalAlignment="Right" Margin="5,10,5,10" Click="btnClear_Click"/>
 
                 <TextBlock Visibility="Collapsed"
-                x:Name="destination"
+                x:Name="tbMainText"
                 TextWrapping="Wrap"                
                 Background="Black"
                 />
@@ -31,7 +31,5 @@
                 </StackPanel>
             </ScrollViewer>
         </DockPanel>
-
-
     </Grid>
 </UserControl>

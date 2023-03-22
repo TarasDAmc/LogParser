@@ -11,10 +11,5 @@ namespace LogParser
         {
             InitializeComponent();
         }
-
-        private void btnSaveMessage_Click(object sender, RoutedEventArgs e)
-        {
-            //wraping_panel.Children.Add(new )
-        }
     }
 }

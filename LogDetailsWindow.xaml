@@ -7,11 +7,6 @@
         Title="LogDetailsWindow" Background="Black" Width="550" Height="250" FontWeight="Bold" FontSize="15" TextBlock.TextAlignment="Left" >
     <Grid>
         <TextBlock x:Name="tbDetail" TextWrapping="Wrap" />
-        <WrapPanel x:Name="wraping_panel"  />
-        <Grid Margin="430, 210, 0 ,0">
-            <Button Content="Save message" Click="btnSaveMessage_Click"/>
-        </Grid>
-
     </Grid>
     
 </Window>

@@ -36,7 +36,10 @@ namespace LogParser
             lbLogTitle.Content = logTitle;
         }
         #endregion       
-        public void Clear() => destination.Text = String.Empty;
+        public void Clear() => spMainLines.Children.Clear();
+        private void btnClose_Click(object sender, RoutedEventArgs e) => onRemove(this);
+        private void btnClear_Click(object sender, RoutedEventArgs e) => Clear();
+
         string LineCleaner(string line) => string.Join(" ", line.Split(' ').Where(p => !p.StartsWith("[")));
         string CleanEndLines(string line) => line.Replace("[0m", "");
 
@@ -75,45 +78,37 @@ namespace LogParser
             string hasDate = LineDateTimeFounder(line);
             if (line == null) return;
 
-            if (lineInput.Contains("[0;32mI")
-                && (displaySettings.showInfo)) // info
+            if (lineInput.Contains("[0;32mI") && (displaySettings.showInfo)) // info
             {
-                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.Green));
-                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.Green));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.Green, FontWeight = FontWeights.Thin));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.Green, FontWeight = FontWeights.Thin));
             }
-            else if (lineInput.Contains("[0;31mE")
-                 && (displaySettings.showErrors || displaySettings.showAll)) // error
+            else if (lineInput.Contains("[0;31mE") && (displaySettings.showErrors)) // error
             {
-                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.Red));
-                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.Red));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.Red, FontWeight = FontWeights.Thin));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.Red, FontWeight = FontWeights.Thin));
             }
-            else if (lineInput.Contains("[0;33mW")
-                 && (displaySettings.showWarning || displaySettings.showAll)) //warning
+            else if (lineInput.Contains("[0;33mW") && (displaySettings.showWarning)) //warning
             {
-                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.Yellow));
-                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.Yellow));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.Yellow, FontWeight = FontWeights.Thin));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.Yellow, FontWeight = FontWeights.Thin));
             }
-            else if (lineInput.Contains("[0;34m")
-                 && (displaySettings.showVerbose || displaySettings.showAll)) // verbose
+            else if (lineInput.Contains("[0;34m") && (displaySettings.showEcho)) // echo
             {
-                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightBlue));
-                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightBlue));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightBlue, FontWeight = FontWeights.Thin));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightBlue, FontWeight = FontWeights.Thin));
             }
-            else if (lineInput.Contains("[1;34m")
-                 && (displaySettings.showVerbose || displaySettings.showAll))// verbose
+            else if (lineInput.Contains("[1;34m") && (displaySettings.showBold))// bold
             {
-                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightSkyBlue));
-                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightSkyBlue));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightBlue, FontWeight = FontWeights.Bold));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.LightSkyBlue, FontWeight = FontWeights.Bold));
             }
-            else if (displaySettings.showVerbose || displaySettings.showAll)// verbose
+            else if ((!lineInput.Contains("[")) && displaySettings.showSimple)// simple
             {
-                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.White));
-                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.White));
+                spMainLines.Children.Add(new Open_Details(LineCleaner(hasDate), Brushes.White, FontWeight = FontWeights.Thin));
+                lines.Add(new Open_Details(LineCleaner(hasDate), Brushes.White, FontWeight = FontWeights.Thin));
             }
             mainSv.ScrollToEnd();
         }
-
-        private void btnClose_Click(object sender, RoutedEventArgs e) => onRemove(this);
-        private void btnClear_Click(object sender, RoutedEventArgs e) => Clear();
     }
 }

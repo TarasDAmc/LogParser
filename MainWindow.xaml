@@ -54,59 +54,82 @@
                 DockPanel.Dock="Left"
                 Margin="3"
                 FontWeight="Bold"/>
-            <Border BorderBrush="AliceBlue" CornerRadius="5" BorderThickness="2" Margin="0 10 0 0" Loaded="Window_Configuration">
-                <StackPanel>
-                    <Label
-                        Content="Display creation"
-                        HorizontalContentAlignment="Center"
-                        x:Name="lblCreateDisplay"
-                        FontWeight="Bold"
-                        FontSize="15" />
-                    <Label  
-                        HorizontalContentAlignment="Center"
-                        Content="Show messages"
-                        x:Name="Massages"
-                        FontWeight="Bold"/>
-                    <StackPanel Margin="15 0 0 5" >
-                        <!--<CheckBox
-                            x:Name="cbAll"
-                            Content="Show ALL"
-                            Checked="cbAll_CheckedChanged"
-                            Unchecked="cbAll_CheckedChanged"
-                            IsChecked="True" />-->
-                        <StackPanel Margin="10 5 10 0">
-                            <CheckBox
-                                x:Name="cbInfo"
-                                Content="INFO"
-                                IsChecked="True" 
-                                />
-                            <CheckBox
-                                x:Name="cbWarnings"
-                                Content="Warnings"
-                                IsChecked="True"
-                                />
-                            <CheckBox
-                                x:Name="cbErrors"
-                                Content="ERROR"
-                                IsChecked="True" 
-                                />
-                            <CheckBox
-                                x:Name="cbEcho"
-                                Content="ECHO"
-                                IsChecked="True" 
-                                />
+            <WrapPanel>
+                <Border BorderBrush="AliceBlue" CornerRadius="5" BorderThickness="2" Margin="0 10 0 0" Background="LightCyan">
+                    <StackPanel>
+                        <Label
+                            Content="Display creation"
+                            HorizontalContentAlignment="Center"
+                            x:Name="lblCreateDisplay"
+                            FontWeight="Bold"
+                            FontSize="15" />
+                        <Label  
+                            HorizontalContentAlignment="Center"
+                            Content="Show messages"
+                            x:Name="Massages"
+                            FontWeight="Bold"/>
+                        <StackPanel Margin="15 0 0 5" >
+                            <!--<CheckBox
+                                x:Name="cbAll"
+                                Content="Show ALL"
+                                IsChecked="True" />-->
+                            <StackPanel Margin="10 5 10 0">
+                                <CheckBox
+                                    x:Name="cbInfo"
+                                    Content="INFO"
+                                    IsChecked="True"
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                                <CheckBox
+                                    x:Name="cbWarnings"
+                                    Content="WARNING"
+                                    IsChecked="True"
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                                <CheckBox
+                                    x:Name="cbErrors"
+                                    Content="ERROR"
+                                    IsChecked="True"
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                                <CheckBox
+                                    x:Name="cbEcho"
+                                    Content="ECHO"
+                                    IsChecked="True" 
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                                <CheckBox
+                                    x:Name="cbBold"
+                                    Content="BOLD"
+                                    IsChecked="True" 
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                                <CheckBox
+                                    x:Name="cbSimple"
+                                    Content="SIMPLE"
+                                    IsChecked="True" 
+                                    Checked="cb_Display_configuration_change"
+                                    Unchecked="cb_Display_configuration_change"
+                                    />
+                            </StackPanel>
                         </StackPanel>
+                        <Button
+                            Content="Create new display"
+                            Loaded="Window_Configuration"
+                            x:Name="btnCreate_Display" 
+                            Click="btnCreate_Display_Click"   
+                            DockPanel.Dock="Right"
+                            Margin="3"
+                            Background="GreenYellow"
+                            FontWeight="Bold" />
                     </StackPanel>
-                    <Button
-                        Content="Create display" 
-                        x:Name="btnCreate_Display" 
-                        Click="btnCreate_Display_Click"   
-                        DockPanel.Dock="Right"
-                        Margin="3"
-                        Background="GreenYellow"
-                        FontWeight="Bold" />
-                </StackPanel>
-            </Border>
+                </Border>
+            </WrapPanel>
         </StackPanel>
     </Grid>
 </Window>

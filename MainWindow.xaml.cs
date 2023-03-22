@@ -55,11 +55,10 @@ namespace LogParser
                             LogDisplay ddAtLeastWarn = new LogDisplay(CloseDisplay, "At least warnings", new DisplaySettings(DisplayType.atLeastWarning));
                             displays.Add(ddAtLeastWarn);
                             gridForTextBlocks.Children.Add(ddAtLeastWarn);
-                            LogDisplay ddAll = new LogDisplay(CloseDisplay, "All", new DisplaySettings(DisplayType.all));
+                            LogDisplay ddAll = new LogDisplay(CloseDisplay, "All", new DisplaySettings());
                             displays.Add(ddAll);
                             gridForTextBlocks.Children.Add(ddAll);
                         }
-
                         foreach (var d in displays)
                         {
                             d.LineAppender(lineToAdd);
@@ -111,24 +110,31 @@ namespace LogParser
             }
         }
 
-        List<CheckBox> customWindowConfiguration = new List<CheckBox>();
-
-
+        List<CheckBox> customDisplayConfiguration = new List<CheckBox>();
         private void Window_Configuration(object sender, RoutedEventArgs e)
         {
-            //cbAll.IsChecked = true;
             cbInfo.IsChecked = true;
             cbErrors.IsChecked = true;
             cbWarnings.IsChecked = true;
             cbEcho.IsChecked = true;
+            cbBold.IsChecked = true;
+            cbSimple.IsChecked = true;
 
-            //customWindowConfiguration.Add(cbAll);
-            customWindowConfiguration.Add(cbInfo);
-            customWindowConfiguration.Add(cbErrors);
-            customWindowConfiguration.Add(cbWarnings);
-            customWindowConfiguration.Add(cbEcho);
+            customDisplayConfiguration.Add(cbInfo);
+            customDisplayConfiguration.Add(cbErrors);
+            customDisplayConfiguration.Add(cbWarnings);
+            customDisplayConfiguration.Add(cbEcho);
+            customDisplayConfiguration.Add(cbBold);
+            customDisplayConfiguration.Add(cbSimple);
+        }
 
-
+        private void cb_Display_configuration_change(object checkBox, RoutedEventArgs e)
+        {
+            foreach (CheckBox c in customDisplayConfiguration)
+            {
+                if (c.IsChecked == false) c.IsChecked = false;
+                else c.IsChecked = true;
+            }
         }
     }
 }
