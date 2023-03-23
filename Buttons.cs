@@ -50,7 +50,7 @@ namespace LogParser
 
         private void btnCreate_Display_Click(object sender, RoutedEventArgs e)
         {
-            LogDisplay ddCustom = new LogDisplay(CloseDisplay, "Custom display", new DisplaySettings(customDisplayConfiguration));
+            LogDisplay ddCustom = new LogDisplay(CloseDisplay, "Custom display", new DisplaySettings(displayConfiguration));
             displays.Add(ddCustom);
             gridForTextBlocks.Children.Add(ddCustom);
         }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LogParser"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -13,9 +13,9 @@
         </Grid.RowDefinitions>
         <Grid>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Label x:Name="lbLogTitle" Content="Unnamed window" HorizontalAlignment="Left" FontSize="20"/>
-                <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Right"  Margin="5,10,5,10" Click="btnClose_Click"/>
-                <Button x:Name="btnClear" Content="Clear" HorizontalAlignment="Right" Margin="5,10,5,10" Click="btnClear_Click"/>
+                <Label x:Name="lbLogTitle" Content="Unnamed window" HorizontalAlignment="Left" FontSize="20" FontWeight="Bold"/>
+                <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Right"  Margin="5,10,5,10" Click="btnClose_Click" FontWeight="Bold"/>
+                <Button x:Name="btnClear" Content="Clear" HorizontalAlignment="Right" Margin="5,10,5,10" Click="btnClear_Click" FontWeight="Bold"/>
 
                 <TextBlock Visibility="Collapsed"
                 x:Name="tbMainText"
@@ -25,10 +25,10 @@
             </StackPanel>
         </Grid>
         <DockPanel Grid.Row="1" LastChildFill="True">
-            <ScrollViewer DockPanel.Dock="Bottom" x:Name="mainSv"         
-            VerticalScrollBarVisibility="Visible">
-                <StackPanel x:Name="spMainLines">
-                </StackPanel>
+            <ScrollViewer DockPanel.Dock="Bottom" x:Name="mainSv" VerticalScrollBarVisibility="Visible">
+                <Border BorderBrush="AliceBlue" BorderThickness="2" >
+                    <StackPanel x:Name="spMainLines" />
+                </Border>
             </ScrollViewer>
         </DockPanel>
     </Grid>

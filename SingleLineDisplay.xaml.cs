@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -10,7 +9,6 @@ namespace LogParser
     /// </summary>
     public partial class Open_Details : UserControl
     {
-        DateTime dt = DateTime.Now;
         public Open_Details()
         {
             InitializeComponent();
