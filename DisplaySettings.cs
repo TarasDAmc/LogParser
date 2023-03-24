@@ -58,6 +58,8 @@ namespace LogParser
                     showWarning = true;
                     showInfo = false;
                     showEcho = false;
+                    showBold = false;
+                    showSimple = false;
                     break;
             }
         }

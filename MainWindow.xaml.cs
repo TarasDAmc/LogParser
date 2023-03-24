@@ -20,10 +20,12 @@ namespace LogParser
         List<string> lines = new List<string>();
         List<byte> buffer = new List<byte>();
         string line = "";
+        LogMainDisplay mainDisplay = new LogMainDisplay(new DisplaySettings(displayConfiguration));
         List<LogDisplay> displays = new List<LogDisplay>();
-
+        List<Dictionary<string, string>> chakedLines = new List<Dictionary<string, string>>();
+        public static List<Dictionary<string, string>> sortedLines = new List<Dictionary<string, string>>();
+        static List<CheckBox> displayConfiguration = new List<CheckBox>();
         #endregion
-
         public MainWindow()
         {
             InitializeComponent();
@@ -39,30 +41,33 @@ namespace LogParser
                 BaudRateBox.ItemsSource = null;
                 BaudRateBox.ItemsSource = baudRateList;
             }
-        }
+        } // Baud rate
 
         private void AppendBytes(byte[] bytes)
         {
             try
             {
                 string lineToAdd = LineAllocator(bytes);
+                var parsedLine = new LineHolder();
+                var l = parsedLine.LineSegregator(lineToAdd);
                 if (Application.Current is not null)
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        if (displays.Count == 0)
+                        if (displays.Count > 0)
                         {
-                            LogDisplay ddAtLeastWarn = new LogDisplay(CloseDisplay, "At least warnings", new DisplaySettings(DisplayType.atLeastWarning));
-                            displays.Add(ddAtLeastWarn);
-                            gridForTextBlocks.Children.Add(ddAtLeastWarn);
-                            LogDisplay ddAll = new LogDisplay(CloseDisplay, "All", new DisplaySettings());
-                            displays.Add(ddAll);
-                            gridForTextBlocks.Children.Add(ddAll);
+                            foreach (var d in displays)
+                            {
+                                d.LineAppender(l);
+                            }
                         }
-                        foreach (var d in displays)
+
+                        if (chakedLines is not null)
                         {
-                            d.LineAppender(lineToAdd);
+                            mainDisplay.LineListAppender(chakedLines);
+                            chakedLines.Clear();
                         }
+                        mainDisplay.LineAppender(l);
                     });
                 }
             }
@@ -102,15 +107,14 @@ namespace LogParser
             try
             {
                 gridForTextBlocks.Children.Remove(displayToRemove);
+                gridForTextBlocksMainWindow.Children.Remove(displayToRemove);
                 displays.Remove(displayToRemove);
             }
-            catch
+            catch (Exception ex)
             {
-
+                MessageBox.Show("Can't close the display", ex.Message);
             }
         }
-
-        List<CheckBox> customDisplayConfiguration = new List<CheckBox>();
         private void Window_Configuration(object sender, RoutedEventArgs e)
         {
             cbInfo.IsChecked = true;
@@ -120,21 +124,40 @@ namespace LogParser
             cbBold.IsChecked = true;
             cbSimple.IsChecked = true;
 
-            customDisplayConfiguration.Add(cbInfo);
-            customDisplayConfiguration.Add(cbErrors);
-            customDisplayConfiguration.Add(cbWarnings);
-            customDisplayConfiguration.Add(cbEcho);
-            customDisplayConfiguration.Add(cbBold);
-            customDisplayConfiguration.Add(cbSimple);
+            displayConfiguration.Add(cbInfo);
+            displayConfiguration.Add(cbErrors);
+            displayConfiguration.Add(cbWarnings);
+            displayConfiguration.Add(cbEcho);
+            displayConfiguration.Add(cbBold);
+            displayConfiguration.Add(cbSimple);
         }
 
         private void cb_Display_configuration_change(object checkBox, RoutedEventArgs e)
         {
-            foreach (CheckBox c in customDisplayConfiguration)
+            foreach (CheckBox c in displayConfiguration)
             {
                 if (c.IsChecked == false) c.IsChecked = false;
                 else c.IsChecked = true;
             }
+
+            gridForTextBlocksMainWindow.Children.Clear();
+            var dl = new LineHolder();
+
+            if (sortedLines is not null)
+            {
+                var allLines = dl.getAllLines();
+                foreach (var d in allLines)
+                {
+                    if (d.ContainsKey("info") && cbInfo.IsChecked == true) chakedLines.Add(d);
+                    else if (d.ContainsKey("error") && cbErrors.IsChecked == true) chakedLines.Add(d);
+                    else if (d.ContainsKey("warning") && cbWarnings.IsChecked == true) chakedLines.Add(d);
+                    else if (d.ContainsKey("echo") && cbEcho.IsChecked == true) chakedLines.Add(d);
+                    else if (d.ContainsKey("bold") && cbBold.IsChecked == true) chakedLines.Add(d);
+                    else if (d.ContainsKey("simple") && cbSimple.IsChecked == true) chakedLines.Add(d);
+                }
+            }
+            mainDisplay = new LogMainDisplay(new DisplaySettings(displayConfiguration));
+            gridForTextBlocksMainWindow.Children.Add(mainDisplay);
         }
     }
 }
