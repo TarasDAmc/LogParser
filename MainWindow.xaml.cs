@@ -20,12 +20,12 @@ namespace LogParser
         List<string> lines = new List<string>();
         List<byte> buffer = new List<byte>();
         string line = "";
-        LogDisplay mainDisplay = new LogDisplay();
+        LogMainDisplay mainDisplay = new LogMainDisplay(new DisplaySettings(displayConfiguration));
         List<LogDisplay> displays = new List<LogDisplay>();
-        public static List<Open_Details> logs = new List<Open_Details>();
-
+        List<Dictionary<string, string>> chakedLines = new List<Dictionary<string, string>>();
+        public static List<Dictionary<string, string>> sortedLines = new List<Dictionary<string, string>>();
+        static List<CheckBox> displayConfiguration = new List<CheckBox>();
         #endregion
-
         public MainWindow()
         {
             InitializeComponent();
@@ -41,13 +41,15 @@ namespace LogParser
                 BaudRateBox.ItemsSource = null;
                 BaudRateBox.ItemsSource = baudRateList;
             }
-        }
+        } // Baud rate
 
         private void AppendBytes(byte[] bytes)
         {
             try
             {
                 string lineToAdd = LineAllocator(bytes);
+                var parsedLine = new LineHolder();
+                var l = parsedLine.LineSegregator(lineToAdd);
                 if (Application.Current is not null)
                 {
                     Application.Current.Dispatcher.Invoke(() =>
@@ -56,11 +58,16 @@ namespace LogParser
                         {
                             foreach (var d in displays)
                             {
-                                d.LineAppender(lineToAdd);
+                                d.LineAppender(l);
                             }
-
                         }
-                        mainDisplay.LineAppender(lineToAdd);
+
+                        if (chakedLines is not null)
+                        {
+                            mainDisplay.LineListAppender(chakedLines);
+                            chakedLines.Clear();
+                        }
+                        mainDisplay.LineAppender(l);
                     });
                 }
             }
@@ -100,26 +107,14 @@ namespace LogParser
             try
             {
                 gridForTextBlocks.Children.Remove(displayToRemove);
+                gridForTextBlocksMainWindow.Children.Remove(displayToRemove);
                 displays.Remove(displayToRemove);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Can't close display", ex.Message);
+                MessageBox.Show("Can't close the display", ex.Message);
             }
         }
-        private void CloseMainDisplay(LogMainDisplay mainDisplay)
-        {
-            try
-            {
-                gridForTextBlocksMainWindow.Children.Remove(mainDisplay);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Can't close main display", ex.Message);
-            }
-        }
-
-        static List<CheckBox> displayConfiguration = new List<CheckBox>();
         private void Window_Configuration(object sender, RoutedEventArgs e)
         {
             cbInfo.IsChecked = true;
@@ -145,21 +140,23 @@ namespace LogParser
                 else c.IsChecked = true;
             }
 
-            if (LogDisplay.sortedLines is not null)
+            gridForTextBlocksMainWindow.Children.Clear();
+            var dl = new LineHolder();
+
+            if (sortedLines is not null)
             {
-                foreach (var d in LogDisplay.sortedLines)
+                var allLines = dl.getAllLines();
+                foreach (var d in allLines)
                 {
-                    var details = new Open_Details();
-                    if (d.TryGetValue("info", out details) && cbInfo.IsChecked == true) logs.Add(details);
-                    else if (d.TryGetValue("error", out details) && cbErrors.IsChecked == true) logs.Add(details);
-                    else if (d.TryGetValue("warning", out details) && cbWarnings.IsChecked == true) logs.Add(details);
-                    else if (d.TryGetValue("echo", out details) && cbEcho.IsChecked == true) logs.Add(details);
-                    else if (d.TryGetValue("bold", out details) && cbBold.IsChecked == true) logs.Add(details);
-                    else if (d.TryGetValue("simple", out details) && cbSimple.IsChecked == true) logs.Add(details);
+                    if (d.ContainsKey("info") && cbInfo.IsChecked == true) chakedLines.Add(d);
+                    else if (d.ContainsKey("error") && cbErrors.IsChecked == true) chakedLines.Add(d);
+                    else if (d.ContainsKey("warning") && cbWarnings.IsChecked == true) chakedLines.Add(d);
+                    else if (d.ContainsKey("echo") && cbEcho.IsChecked == true) chakedLines.Add(d);
+                    else if (d.ContainsKey("bold") && cbBold.IsChecked == true) chakedLines.Add(d);
+                    else if (d.ContainsKey("simple") && cbSimple.IsChecked == true) chakedLines.Add(d);
                 }
             }
-            gridForTextBlocksMainWindow.Children.Clear();
-            mainDisplay = new LogDisplay(CloseDisplay, "Main Display", new DisplaySettings(displayConfiguration));
+            mainDisplay = new LogMainDisplay(new DisplaySettings(displayConfiguration));
             gridForTextBlocksMainWindow.Children.Add(mainDisplay);
         }
     }

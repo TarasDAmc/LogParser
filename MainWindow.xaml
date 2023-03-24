@@ -15,7 +15,7 @@
         <Grid Grid.Column="1" Grid.ColumnSpan="3" Margin="145 10 10 10" Width="600" HorizontalAlignment="Left">
             <UniformGrid Columns="1" x:Name="gridForTextBlocksMainWindow" Grid.Column="1"/>
         </Grid>
-        <Grid Grid.Column="1" Grid.ColumnSpan="3" Margin="750 10 10 10" HorizontalAlignment="Left">
+        <Grid Grid.Column="2" Grid.ColumnSpan="3" Margin="620 10 10 10" Width="auto" HorizontalAlignment="Left">
             <UniformGrid Columns="1" x:Name="gridForTextBlocks" Grid.Column="2"/>
         </Grid>
         <StackPanel VerticalAlignment="Top" Grid.Column="1"

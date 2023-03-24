@@ -7,13 +7,13 @@ namespace LogParser
     /// <summary>
     /// Interaction logic for SingleLineDisplay.xaml
     /// </summary>
-    public partial class Open_Details : UserControl
+    public partial class LineDetasils : UserControl
     {
-        public Open_Details()
+        public LineDetasils()
         {
             InitializeComponent();
         }
-        public Open_Details(string content, SolidColorBrush c)
+        public LineDetasils(string content, SolidColorBrush c)
         {
             InitializeComponent();
             tbMainText.Foreground = c;
@@ -21,7 +21,7 @@ namespace LogParser
             tbMainText.TextAlignment = TextAlignment.Left;
         }
 
-        public Open_Details(string content, SolidColorBrush c, FontWeight weight)
+        public LineDetasils(string content, SolidColorBrush c, FontWeight weight)
         {
             InitializeComponent();
             tbMainText.Foreground = c;

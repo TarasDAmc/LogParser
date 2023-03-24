@@ -32,6 +32,10 @@ namespace LogParser
                             dispatcherTimer.Start();
                             readData = new ReadDataFromCom(AppendBytes);
 
+                            gridForTextBlocksMainWindow.Children.Clear();
+                            mainDisplay = new LogMainDisplay(new DisplaySettings(displayConfiguration));
+                            gridForTextBlocksMainWindow.Children.Add(mainDisplay);
+
                             if (readData.OpenPort(COM_Port_list.Text, Convert.ToInt32(BaudRateBox.Text)))
                                 Connect_btn.Content = "Disconnect";
                         }
@@ -68,6 +72,7 @@ namespace LogParser
                 {
                     d.Clear();
                 }
+                mainDisplay.Clear();
             }
             catch (Exception ex)
             {
