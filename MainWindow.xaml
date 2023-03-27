@@ -74,50 +74,46 @@
                             x:Name="Massages"
                             FontWeight="Bold"/>
                         <StackPanel Margin="15 0 0 5" >
-                            <!--<CheckBox
+                            <CheckBox
                                 x:Name="cbAll"
-                                Content="Show ALL"
-                                IsChecked="True" />-->
+                                IsThreeState="True"
+                                Checked="cbAll_Display_configuration_change"
+                                Unchecked="cbAll_Display_configuration_change"
+                                Content="Show ALL" />
                             <StackPanel Margin="10 5 10 0">
                                 <CheckBox
                                     x:Name="cbInfo"
                                     Content="INFO"
-                                    IsChecked="True"
                                     Checked="cb_Display_configuration_change"
                                     Unchecked="cb_Display_configuration_change"
                                     />
                                 <CheckBox
                                     x:Name="cbWarnings"
                                     Content="WARNING"
-                                    IsChecked="True"
                                     Checked="cb_Display_configuration_change"
                                     Unchecked="cb_Display_configuration_change"
                                     />
                                 <CheckBox
                                     x:Name="cbErrors"
                                     Content="ERROR"
-                                    IsChecked="True"
                                     Checked="cb_Display_configuration_change"
                                     Unchecked="cb_Display_configuration_change"
                                     />
                                 <CheckBox
                                     x:Name="cbEcho"
                                     Content="ECHO"
-                                    IsChecked="True" 
                                     Checked="cb_Display_configuration_change"
                                     Unchecked="cb_Display_configuration_change"
                                     />
                                 <CheckBox
                                     x:Name="cbBold"
                                     Content="BOLD"
-                                    IsChecked="True" 
                                     Checked="cb_Display_configuration_change"
                                     Unchecked="cb_Display_configuration_change"
                                     />
                                 <CheckBox
                                     x:Name="cbSimple"
                                     Content="SIMPLE"
-                                    IsChecked="True" 
                                     Checked="cb_Display_configuration_change"
                                     Unchecked="cb_Display_configuration_change"
                                     />

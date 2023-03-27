@@ -117,6 +117,7 @@ namespace LogParser
         }
         private void Window_Configuration(object sender, RoutedEventArgs e)
         {
+
             cbInfo.IsChecked = true;
             cbErrors.IsChecked = true;
             cbWarnings.IsChecked = true;
@@ -158,6 +159,39 @@ namespace LogParser
             }
             mainDisplay = new LogMainDisplay(new DisplaySettings(displayConfiguration));
             gridForTextBlocksMainWindow.Children.Add(mainDisplay);
+
+            #region cbAllIsChaked
+            cbAll.IsChecked = null;
+            if ((cbInfo.IsChecked == true) &&
+                (cbErrors.IsChecked == true) &&
+                (cbWarnings.IsChecked == true) &&
+                (cbEcho.IsChecked == true) &&
+                (cbBold.IsChecked == true) &&
+                (cbSimple.IsChecked == true))
+            {
+                cbAll.IsChecked = true;
+            }
+            if ((cbInfo.IsChecked == false) &&
+                (cbErrors.IsChecked == false) &&
+                (cbWarnings.IsChecked == false) &&
+                (cbEcho.IsChecked == false) &&
+                (cbBold.IsChecked == false) &&
+                (cbSimple.IsChecked == false))
+            {
+                cbAll.IsChecked = false;
+            }
+            #endregion
+        }
+
+        private void cbAll_Display_configuration_change(object sender, RoutedEventArgs e)
+        {
+            bool newVal = (cbAll.IsChecked == true);
+            cbInfo.IsChecked = newVal;
+            cbErrors.IsChecked = newVal;
+            cbWarnings.IsChecked = newVal;
+            cbEcho.IsChecked = newVal;
+            cbBold.IsChecked = newVal;
+            cbSimple.IsChecked = newVal;
         }
     }
 }
