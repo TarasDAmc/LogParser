@@ -11,13 +11,10 @@
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="140"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="1" Grid.ColumnSpan="3" Margin="145 10 10 10" Width="600" HorizontalAlignment="Left">
-            <UniformGrid Columns="1" x:Name="gridForTextBlocksMainWindow" Grid.Column="1"/>
-        </Grid>
-        <Grid Grid.Column="2" Grid.ColumnSpan="3" Margin="620 10 10 10" Width="auto" HorizontalAlignment="Left">
-            <UniformGrid Columns="1" x:Name="gridForTextBlocks" Grid.Column="2"/>
-        </Grid>
+        <UniformGrid Columns="1" x:Name="gridForTextBlocksMainWindow" Grid.Column="2"/>
+        <UniformGrid Columns="1" x:Name="gridForTextBlocks" Grid.Column="3"/>        
         <StackPanel VerticalAlignment="Top" Grid.Column="1"
             Margin="5,47,5,30">
             <DockPanel>
